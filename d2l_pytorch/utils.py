@@ -1,9 +1,18 @@
 from IPython import display
 from matplotlib import pyplot as plt
 import torchvision
+from torch import nn
 import torchvision.transforms as transforms
 import sys
 import torch
+
+def set_figsize(figsize=(3.5, 2.5)):
+    use_svg_display()
+    plt.rcParams['figure.figsize'] = figsize
+
+def use_svg_display():
+    """Use svg format to display plot in jupyter"""
+    display.set_matplotlib_formats('svg')
 
 def get_fashion_mnist_labels(labels):
   text_labels = ['t-shirt', 'trouser', 'pullover', 'dress', 'coat',
@@ -60,7 +69,7 @@ def train_ch3(net, train_iter, test_iter, loss, num_epochs, batch_size,
             if optimizer is None:
                 sgd(params, lr, batch_size)
             else:
-                optimizer.step()  # “softmax回归的简洁实现”一节将用到
+                optimizer.step()
 
 
             train_l_sum += l.item()
@@ -75,4 +84,11 @@ def train_ch3(net, train_iter, test_iter, loss, num_epochs, batch_size,
 def sgd(params, lr, batch_size):
     for param in params:
         param.data.sub_(lr*param.grad/batch_size)
+
+class FlattenLayer(nn.Module):
+    def __init__(self):
+        super(FlattenLayer, self).__init__()
+
+    def forward(self, x):
+        return x.view(x.shape[0], -1)
 

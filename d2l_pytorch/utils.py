@@ -94,6 +94,12 @@ def sgd(params, lr, batch_size):
     for param in params:
         param.data.sub_(lr*param.grad/batch_size)
 
+def linreg(X, w, b): 
+    return torch.mm(X, w) + b
+
+def squared_loss(y_hat, y): 
+    return ((y_hat - y.view(y_hat.size())) ** 2) / 2
+
 class FlattenLayer(nn.Module):
     def __init__(self):
         super(FlattenLayer, self).__init__()
